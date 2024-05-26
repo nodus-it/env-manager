@@ -2,9 +2,7 @@
 
 namespace App\Models\Enums;
 
-use Exception;
-use ReflectionEnum;
-use ReflectionException;
+use Illuminate\Support\Str;
 
 // ToDo: Tools-Sammlung
 
@@ -31,8 +29,15 @@ trait EnumHelper
 
     public static function options(): array
     {
-        return array_column(static::cases(), 'value', 'name');
+        $options = [];
+        foreach (static::cases() as $case) {
+            $options[$case->value] = $case->getLabel();
+        }
+        return $options;
     }
 
-
+    public function getLabel(): ?string
+    {
+        return trans(self::TRANSLATION_FILE . '.enum.status.' . Str::lower($this->name));
+    }
 }

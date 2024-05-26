@@ -11,8 +11,6 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class UserResource extends Resource
 {
@@ -51,17 +49,12 @@ class UserResource extends Resource
                 Tables\Columns\TextColumn::make('email'),
                 Tables\Columns\TextColumn::make('status')
                     ->badge()
-                    ->color(fn(string $state): string => match ($state) {
-                        UserStatus::ACTIVE->value => 'success',
-                        UserStatus::INACTIVE->value => 'warning',
-                        UserStatus::BLOCKED->value => 'danger',
-                    })
             ])
             ->filters([
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
