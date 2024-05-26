@@ -2,6 +2,8 @@
 
 namespace App\Models\Enums;
 
+use Filament\Resources\Components\Tab;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Str;
 
 // ToDo: Tools-Sammlung
@@ -14,7 +16,7 @@ trait EnumHelper
     public static function keys(): array
     {
         return array_map(
-            fn (self $case) => $case->name,
+            fn(self $case) => $case->name,
             static::cases()
         );
     }
@@ -22,7 +24,7 @@ trait EnumHelper
     public static function values(): array
     {
         return array_map(
-            fn (self $case) => $case->value,
+            fn(self $case) => $case->value,
             static::cases()
         );
     }
@@ -39,5 +41,16 @@ trait EnumHelper
     public function getLabel(): ?string
     {
         return trans(self::TRANSLATION_FILE . '.enum.status.' . Str::lower($this->name));
+    }
+
+    public static function getTabs()
+    {
+        $tabs = [];
+        foreach (self::cases() as $case) {
+            $tabs[$case->name] = Tab::make()
+                ->modifyQueryUsing(fn(Builder $query) => $query->where('status', $case->value))
+                ->label($case->getLabel());
+        }
+        return $tabs;
     }
 }
