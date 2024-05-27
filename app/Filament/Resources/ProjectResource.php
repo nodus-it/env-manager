@@ -35,7 +35,9 @@ class ProjectResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')
-                    ->description(fn(Project $project): string => $project->description),
+                    ->description(fn(Project $project): string => $project->description)
+                    ->sortable()
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('status')
                     ->badge(),
             ])
@@ -62,9 +64,9 @@ class ProjectResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListProjects::route('/'),
+            'index'  => Pages\ListProjects::route('/'),
             'create' => Pages\CreateProject::route('/create'),
-            'edit' => Pages\EditProject::route('/{record}/edit'),
+            'edit'   => Pages\EditProject::route('/{record}/edit'),
         ];
     }
 }
