@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Project extends Model
 {
@@ -22,5 +23,10 @@ class Project extends Model
         return $this->belongsToMany(Team::class)
             ->withPivot('role')
             ->withTimestamps();
+    }
+
+    public function environments(): HasMany
+    {
+        return $this->hasMany(Environment::class);
     }
 }
