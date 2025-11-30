@@ -8,4 +8,6 @@ return [
     'description' => 'Beschreibung',
     'role' => 'Rolle',
     'members' => 'Mitglieder',
+    'is_default' => 'Default',
+    'type' => 'Typ',
 ];

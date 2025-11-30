@@ -19,4 +19,9 @@ return [
         'label' => 'User',
         'plural' => 'Users',
     ],
+
+    'environment' => [
+        'label' => 'Environment',
+        'plural' => 'Environments',
+    ],
 ];
