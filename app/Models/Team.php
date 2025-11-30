@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Team extends BaseModel
 {
-
     protected $fillable = [
         'name',
         'slug',

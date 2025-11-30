@@ -63,8 +63,8 @@ class DefaultPanelProvider extends PanelProvider
                     ])
                     ->switchable(false),
                 BreezyCore::make()
-                ->myProfile()
-                ->enableTwoFactorAuthentication(),
+                    ->myProfile()
+                    ->enableTwoFactorAuthentication(),
             ]);
     }
 }
