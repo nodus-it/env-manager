@@ -19,4 +19,5 @@ return [
     'variable_key' => 'Variablenschlüssel',
     'value' => 'Wert',
     'order' => 'Reihenfolge',
+    'source' => 'Quelle',
 ];

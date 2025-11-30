@@ -9,6 +9,7 @@ use Filament\Forms;
 use Filament\Infolists;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
+use Filament\Support\Enums\Width;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Validation\Rule;
@@ -95,6 +96,92 @@ class EnvironmentResource extends Resource
             Infolists\Components\TextEntry::make('order')->label(__('fields.order')),
             Infolists\Components\TextEntry::make('created_at')->label(__('timestamps.created_at'))->dateTime('d.m.Y H:i'),
             Infolists\Components\TextEntry::make('updated_at')->label(__('timestamps.updated_at'))->dateTime('d.m.Y H:i'),
+
+            \Filament\Schemas\Components\Section::make(__('environment.effective_variables.title'))
+                ->maxWidth(Width::Full)
+                ->columnSpanFull()
+                ->schema([
+                    Infolists\Components\RepeatableEntry::make('effectiveVariables')
+                        ->label('')
+                        ->columns(5)
+                        ->state(function (Environment $record): array {
+                            // Build effective variables for this environment: env override > project default > key default
+                            $projectId = $record->project_id;
+                            $envId = $record->getKey();
+
+                            $variableKeys = \App\Models\VariableKey::query()
+                                ->select(['id', 'key', 'type', 'is_secret', 'default_value'])
+                                ->orderBy('key')
+                                ->get();
+
+                            $projectDefaults = \App\Models\ProjectVariableValue::query()
+                                ->where('project_id', $projectId)
+                                ->get()
+                                ->keyBy('variable_key_id');
+
+                            $envOverrides = \App\Models\EnvironmentVariableValue::query()
+                                ->where('environment_id', $envId)
+                                ->get()
+                                ->keyBy('variable_key_id');
+
+                            $rows = [];
+                            foreach ($variableKeys as $vk) {
+                                $source = null;
+                                $value = null;
+
+                                if (isset($envOverrides[$vk->id])) {
+                                    $source = 'environment';
+                                    $value = $envOverrides[$vk->id]->value;
+                                } elseif (isset($projectDefaults[$vk->id])) {
+                                    $source = 'project';
+                                    $value = $projectDefaults[$vk->id]->value;
+                                } elseif ($vk->default_value !== null && $vk->default_value !== '') {
+                                    $source = 'default';
+                                    $value = $vk->default_value;
+                                }
+
+                                if ($source === null) {
+                                    continue; // skip keys with no effective value
+                                }
+
+                                $rows[] = [
+                                    'key' => $vk->key,
+                                    'type' => $vk->type,
+                                    'is_secret' => (bool) $vk->is_secret,
+                                    'value' => $vk->is_secret ? '••••' : (string) $value,
+                                    'source' => $source,
+                                ];
+                            }
+
+                            return $rows;
+                        })
+                        ->schema([
+                            Infolists\Components\TextEntry::make('key')
+                                ->label(__('fields.key'))
+                                ->weight('bold'),
+                            Infolists\Components\TextEntry::make('type')
+                                ->label(__('fields.type'))
+                                ->badge(),
+                            Infolists\Components\TextEntry::make('value')
+                                ->label(__('fields.value')),
+                            Infolists\Components\TextEntry::make('source')
+                                ->label(__('fields.source'))
+                                ->formatStateUsing(function (string $state): string {
+                                    return match ($state) {
+                                        'environment' => __('environment.effective_variables.source.environment'),
+                                        'project' => __('environment.effective_variables.source.project'),
+                                        default => __('environment.effective_variables.source.default'),
+                                    };
+                                })
+                                ->badge()
+                                ->color(fn (string $state): string => match ($state) {
+                                    'environment' => 'success',
+                                    'project' => 'warning',
+                                    default => 'gray',
+                                }),
+                        ])
+                        ->contained(false),
+                ]),
         ]);
     }
 
