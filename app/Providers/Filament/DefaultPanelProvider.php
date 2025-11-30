@@ -18,6 +18,7 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use Jeffgreco13\FilamentBreezy\BreezyCore;
 
 class DefaultPanelProvider extends PanelProvider
 {
@@ -28,6 +29,7 @@ class DefaultPanelProvider extends PanelProvider
             ->id('default')
             ->path('/')
             ->login()
+            ->registration()
             ->maxContentWidth(Width::Full)
             ->colors([
                 'primary' => Color::Gray,
@@ -60,6 +62,9 @@ class DefaultPanelProvider extends PanelProvider
                         'Test-User' => 'test@nodus-it.de',
                     ])
                     ->switchable(false),
+                BreezyCore::make()
+                ->myProfile()
+                ->enableTwoFactorAuthentication(),
             ]);
     }
 }
