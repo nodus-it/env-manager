@@ -2,29 +2,20 @@
 
 namespace App\Filament\Resources;
 
+use App\Filament\Resources\EnvironmentResource\Actions\AdoptAsDefaultAction;
+use App\Filament\Resources\EnvironmentResource\Actions\AdoptAsProjectDefaultAction;
+use App\Filament\Resources\EnvironmentResource\Actions\EditAtSourceAction;
 use App\Filament\Resources\EnvironmentResource\Pages;
 use App\Models\Environment;
-use App\Models\EnvironmentVariableValue;
-use App\Models\ProjectVariableValue;
-use App\Models\VariableKey;
-use App\Filament\Resources\EnvironmentVariableValueResource;
-use App\Filament\Resources\ProjectVariableValueResource;
-use App\Filament\Resources\VariableKeyResource;
 use Filament\Actions;
 use Filament\Forms;
 use Filament\Infolists;
-use Filament\Notifications\Notification;
-use Filament\Schemas\Components\Utilities\Get;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
-use Filament\Support\Enums\Width;
 use Filament\Support\Enums\Alignment;
+use Filament\Support\Enums\Width;
 use Filament\Tables;
-use App\Filament\Resources\EnvironmentResource\Actions\EditAtSourceAction;
-use App\Filament\Resources\EnvironmentResource\Actions\AdoptAsProjectDefaultAction;
-use App\Filament\Resources\EnvironmentResource\Actions\AdoptAsDefaultAction;
 use Filament\Tables\Table;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 
 class EnvironmentResource extends Resource
