@@ -11,6 +11,7 @@
         "dutchcodingcompany/filament-developer-logins": "^2.0",
         "filament/filament": "v4.2.4",
         "laravel/framework": "^12.0",
+        "laravel/sanctum": "^4.0",
         "laravel/telescope": "^5.15"
     },
     "require-dev": {

@@ -6,6 +6,7 @@ use App\Filament\Resources\EnvironmentResource\Actions\AdoptAsDefaultAction;
 use App\Filament\Resources\EnvironmentResource\Actions\AdoptAsProjectDefaultAction;
 use App\Filament\Resources\EnvironmentResource\Actions\EditAtSourceAction;
 use App\Filament\Resources\EnvironmentResource\Pages;
+use App\Filament\Resources\EnvironmentResource\RelationManagers\PersonalAccessTokenRelationManager;
 use App\Models\Environment;
 use Filament\Actions;
 use Filament\Forms;
@@ -278,7 +279,7 @@ class EnvironmentResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            PersonalAccessTokenRelationManager::class,
         ];
     }
 

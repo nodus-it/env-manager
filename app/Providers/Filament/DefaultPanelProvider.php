@@ -39,6 +39,7 @@ class DefaultPanelProvider extends PanelProvider
             ->pages([
                 Dashboard::class,
             ])
+            ->readOnlyRelationManagersOnResourceViewPagesByDefault(false)
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
             ->widgets([
             ])
