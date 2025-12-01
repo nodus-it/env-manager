@@ -3,7 +3,6 @@
 namespace App\Filament\Resources\EnvironmentResource\RelationManagers;
 
 use App\Filament\Resources\EnvironmentResource\Actions\CreateEnvironmentTokenAction;
-
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
@@ -26,7 +25,7 @@ class PersonalAccessTokenRelationManager extends RelationManager
             ->recordTitleAttribute('name')
             ->columns([
                 TextColumn::make('name'),
-                TextColumn::make('expires_at')
+                TextColumn::make('expires_at'),
             ])
             ->headerActions([
                 CreateEnvironmentTokenAction::make(),

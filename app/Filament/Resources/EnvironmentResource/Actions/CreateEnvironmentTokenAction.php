@@ -12,7 +12,8 @@ use Filament\Resources\RelationManagers\RelationManager;
 use Illuminate\Database\Eloquent\Model;
 
 class CreateEnvironmentTokenAction extends CreateAction
-{    protected function setUp(): void
+{
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -41,7 +42,7 @@ class CreateEnvironmentTokenAction extends CreateAction
 
                 Notification::make()
                     ->title('Token erstellt')
-                    ->body('Bitte kopieren: ' . $newAccessToken->plainTextToken)
+                    ->body('Bitte kopieren: '.$newAccessToken->plainTextToken)
                     ->persistent()
                     ->send();
 
