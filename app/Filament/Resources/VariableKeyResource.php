@@ -4,15 +4,13 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\VariableKeyResource\Pages;
 use App\Models\VariableKey;
-use Filament\Actions;
 use Filament\Forms;
 use Filament\Infolists;
-use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Tables;
 use Filament\Tables\Table;
 
-class VariableKeyResource extends Resource
+class VariableKeyResource extends BaseResource
 {
     protected static ?string $model = VariableKey::class;
 
@@ -78,8 +76,8 @@ class VariableKeyResource extends Resource
             Infolists\Components\TextEntry::make('description')->label(__('fields.description')),
             Infolists\Components\TextEntry::make('type')->label(__('fields.type')),
             Infolists\Components\IconEntry::make('is_secret')->label(__('fields.is_secret'))->boolean(),
-            Infolists\Components\TextEntry::make('created_at')->label(__('timestamps.created_at'))->dateTime('d.m.Y H:i'),
-            Infolists\Components\TextEntry::make('updated_at')->label(__('timestamps.updated_at'))->dateTime('d.m.Y H:i'),
+            Infolists\Components\TextEntry::make('created_at')->label(__('timestamps.created_at'))->dateTime(self::dateTimeFormat()),
+            Infolists\Components\TextEntry::make('updated_at')->label(__('timestamps.updated_at'))->dateTime(self::dateTimeFormat()),
         ]);
     }
 
@@ -99,22 +97,14 @@ class VariableKeyResource extends Resource
                     ->label(__('fields.is_secret'))
                     ->boolean(),
                 Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime('d.m.Y H:i')
+                    ->dateTime(self::dateTimeFormat())
                     ->sortable(),
             ])
             ->filters([
                 //
             ])
-            ->recordActions([
-                Actions\ActionGroup::make([
-                    Actions\EditAction::make(),
-                ])->label(__('actions.group')),
-            ])
-            ->toolbarActions([
-                Actions\BulkActionGroup::make([
-                    Actions\DeleteBulkAction::make(),
-                ]),
-            ]);
+            ->recordActions(self::defaultRecordActions())
+            ->toolbarActions(self::defaultToolbarActions());
     }
 
     public static function getRelations(): array
@@ -126,9 +116,7 @@ class VariableKeyResource extends Resource
     {
         return [
             'index' => Pages\ListVariableKeys::route('/'),
-            'create' => Pages\CreateVariableKey::route('/create'),
             'view' => Pages\ViewVariableKey::route('/{record}'),
-            'edit' => Pages\EditVariableKey::route('/{record}/edit'),
         ];
     }
 }

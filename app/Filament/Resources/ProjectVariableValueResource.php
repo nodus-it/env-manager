@@ -5,15 +5,13 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\ProjectVariableValueResource\Pages;
 use App\Models\ProjectVariableValue;
 use App\Models\VariableKey;
-use Filament\Actions;
 use Filament\Forms;
 use Filament\Infolists;
-use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Tables;
 use Filament\Tables\Table;
 
-class ProjectVariableValueResource extends Resource
+class ProjectVariableValueResource extends BaseResource
 {
     protected static ?string $model = ProjectVariableValue::class;
 
@@ -87,8 +85,8 @@ class ProjectVariableValueResource extends Resource
         return $schema->schema([
             Infolists\Components\TextEntry::make('project.name')->label(__('models.project.label')),
             Infolists\Components\TextEntry::make('variableKey.key')->label(__('fields.variable_key')),
-            Infolists\Components\TextEntry::make('created_at')->label(__('timestamps.created_at'))->dateTime('d.m.Y H:i'),
-            Infolists\Components\TextEntry::make('updated_at')->label(__('timestamps.updated_at'))->dateTime('d.m.Y H:i'),
+            Infolists\Components\TextEntry::make('created_at')->label(__('timestamps.created_at'))->dateTime(self::dateTimeFormat()),
+            Infolists\Components\TextEntry::make('updated_at')->label(__('timestamps.updated_at'))->dateTime(self::dateTimeFormat()),
         ]);
     }
 
@@ -110,22 +108,14 @@ class ProjectVariableValueResource extends Resource
                         return $record->variableKey?->is_secret ? '••••' : $record->value;
                     }),
                 Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime('d.m.Y H:i')
+                    ->dateTime(self::dateTimeFormat())
                     ->sortable(),
             ])
             ->filters([
                 //
             ])
-            ->recordActions([
-                Actions\ActionGroup::make([
-                    Actions\EditAction::make(),
-                ])->label(__('actions.group')),
-            ])
-            ->toolbarActions([
-                Actions\BulkActionGroup::make([
-                    Actions\DeleteBulkAction::make(),
-                ]),
-            ]);
+            ->recordActions(self::defaultRecordActions())
+            ->toolbarActions(self::defaultToolbarActions());
     }
 
     public static function getRelations(): array
@@ -137,9 +127,7 @@ class ProjectVariableValueResource extends Resource
     {
         return [
             'index' => Pages\ListProjectVariableValues::route('/'),
-            'create' => Pages\CreateProjectVariableValue::route('/create'),
             'view' => Pages\ViewProjectVariableValue::route('/{record}'),
-            'edit' => Pages\EditProjectVariableValue::route('/{record}/edit'),
         ];
     }
 }

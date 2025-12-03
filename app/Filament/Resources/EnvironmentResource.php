@@ -10,17 +10,15 @@ use App\Filament\Resources\EnvironmentResource\Actions\EditAtSourceAction;
 use App\Filament\Resources\EnvironmentResource\Pages;
 use App\Filament\Resources\EnvironmentResource\RelationManagers\PersonalAccessTokenRelationManager;
 use App\Models\Environment;
-use Filament\Actions;
 use Filament\Forms;
 use Filament\Infolists;
-use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Enums\Width;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Validation\Rule;
 
-class EnvironmentResource extends Resource
+class EnvironmentResource extends BaseResource
 {
     protected static ?string $model = Environment::class;
 
@@ -100,8 +98,8 @@ class EnvironmentResource extends Resource
             Infolists\Components\TextEntry::make('type')->label(__('fields.type')),
             Infolists\Components\IconEntry::make('is_default')->label(__('fields.is_default'))->boolean(),
             Infolists\Components\TextEntry::make('order')->label(__('fields.order')),
-            Infolists\Components\TextEntry::make('created_at')->label(__('timestamps.created_at'))->dateTime('d.m.Y H:i'),
-            Infolists\Components\TextEntry::make('updated_at')->label(__('timestamps.updated_at'))->dateTime('d.m.Y H:i'),
+            Infolists\Components\TextEntry::make('created_at')->label(__('timestamps.created_at'))->dateTime(self::dateTimeFormat()),
+            Infolists\Components\TextEntry::make('updated_at')->label(__('timestamps.updated_at'))->dateTime(self::dateTimeFormat()),
 
             \Filament\Schemas\Components\Section::make(__('environment.effective_variables.title'))
                 ->maxWidth(Width::Full)
@@ -187,7 +185,7 @@ class EnvironmentResource extends Resource
                 Tables\Columns\TextColumn::make('order')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime('d.m.Y H:i')
+                    ->dateTime(self::dateTimeFormat())
                     ->sortable(),
             ])
             ->filters([
@@ -197,16 +195,8 @@ class EnvironmentResource extends Resource
                 Tables\Filters\TernaryFilter::make('is_default')
                     ->label(__('fields.is_default')),
             ])
-            ->recordActions([
-                Actions\ActionGroup::make([
-                    Actions\EditAction::make(),
-                ])->label(__('actions.group')),
-            ])
-            ->toolbarActions([
-                Actions\BulkActionGroup::make([
-                    Actions\DeleteBulkAction::make(),
-                ]),
-            ]);
+            ->recordActions(self::defaultRecordActions())
+            ->toolbarActions(self::defaultToolbarActions());
     }
 
     public static function getRelations(): array
@@ -220,9 +210,7 @@ class EnvironmentResource extends Resource
     {
         return [
             'index' => Pages\ListEnvironments::route('/'),
-            'create' => Pages\CreateEnvironment::route('/create'),
             'view' => Pages\ViewEnvironment::route('/{record}'),
-            'edit' => Pages\EditEnvironment::route('/{record}/edit'),
         ];
     }
 }
