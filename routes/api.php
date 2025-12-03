@@ -1,8 +1,14 @@
 <?php
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\GetEnvironmentKeyController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
+Route::middleware([
+    'auth:sanctum',
+    'ability:env.read',
+])->get('/environment', GetEnvironmentKeyController::class);
+//
+// Route::middleware([
+//    'auth:sanctum',
+//    'ability:env.write'
+// ])->post('/environment', GetEnvironmentKeyController::class);

@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources;
 
+use App\Enums\VariableKeySource;
+use App\Facades\EnvironmentService;
 use App\Filament\Resources\EnvironmentResource\Actions\AdoptAsDefaultAction;
 use App\Filament\Resources\EnvironmentResource\Actions\AdoptAsProjectDefaultAction;
 use App\Filament\Resources\EnvironmentResource\Actions\EditAtSourceAction;
@@ -13,7 +15,6 @@ use Filament\Forms;
 use Filament\Infolists;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
-use Filament\Support\Enums\Alignment;
 use Filament\Support\Enums\Width;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -113,71 +114,10 @@ class EnvironmentResource extends Resource
                             Infolists\Components\RepeatableEntry\TableColumn::make(__('fields.type')),
                             Infolists\Components\RepeatableEntry\TableColumn::make(__('fields.value')),
                             Infolists\Components\RepeatableEntry\TableColumn::make(__('fields.source')),
+                            Infolists\Components\RepeatableEntry\TableColumn::make(__('fields.actions')),
                         ])
-                        ->state(function (Environment $record): array {
-                            // Build effective variables for this environment: env override > project default > key default
-                            $projectId = $record->project_id;
-                            $envId = $record->getKey();
-
-                            $variableKeys = \App\Models\VariableKey::query()
-                                ->select(['id', 'key', 'type', 'is_secret', 'default_value'])
-                                ->orderBy('key')
-                                ->get();
-
-                            $projectDefaults = \App\Models\ProjectVariableValue::query()
-                                ->where('project_id', $projectId)
-                                ->get()
-                                ->keyBy('variable_key_id');
-
-                            $envOverrides = \App\Models\EnvironmentVariableValue::query()
-                                ->where('environment_id', $envId)
-                                ->get()
-                                ->keyBy('variable_key_id');
-
-                            $rows = [];
-                            foreach ($variableKeys as $vk) {
-                                $source = null;
-                                $value = null;
-                                $rawValue = null;
-                                $envValueId = null;
-                                $projectValueId = null;
-
-                                if (isset($envOverrides[$vk->id])) {
-                                    $source = 'environment';
-                                    $value = $envOverrides[$vk->id]->value;
-                                    $rawValue = $value;
-                                    $envValueId = $envOverrides[$vk->id]->getKey();
-                                } elseif (isset($projectDefaults[$vk->id])) {
-                                    $source = 'project';
-                                    $value = $projectDefaults[$vk->id]->value;
-                                    $rawValue = $value;
-                                    $projectValueId = $projectDefaults[$vk->id]->getKey();
-                                } elseif ($vk->default_value !== null && $vk->default_value !== '') {
-                                    $source = 'default';
-                                    $value = $vk->default_value;
-                                    $rawValue = $value;
-                                }
-
-                                if ($source === null) {
-                                    continue; // skip keys with no effective value
-                                }
-
-                                $rows[] = [
-                                    'key' => $vk->key,
-                                    'variable_key_id' => $vk->id,
-                                    'environment_id' => $envId,
-                                    'project_id' => $projectId,
-                                    'type' => $vk->type,
-                                    'is_secret' => (bool) $vk->is_secret,
-                                    'value' => $vk->is_secret ? '••••' : (string) $value,
-                                    'raw_value' => (string) $rawValue,
-                                    'source' => $source,
-                                    'env_value_id' => $envValueId,
-                                    'project_value_id' => $projectValueId,
-                                ];
-                            }
-
-                            return $rows;
+                        ->state(function (Environment $environment): array {
+                            return EnvironmentService::getKeys($environment)->toArray();
                         })
                         ->schema([
                             Infolists\Components\TextEntry::make('key')
@@ -187,19 +127,14 @@ class EnvironmentResource extends Resource
                                 ->label(__('fields.type'))
                                 ->badge(),
                             Infolists\Components\TextEntry::make('value')
-                                ->label(__('fields.value'))
-                                ->suffixActions([
-                                    EditAtSourceAction::make(),
-                                    AdoptAsProjectDefaultAction::make(),
-                                    AdoptAsDefaultAction::make(),
-                                ]),
+                                ->label(__('fields.value')),
                             Infolists\Components\TextEntry::make('source')
                                 ->label(__('fields.source'))
                                 ->formatStateUsing(function (string $state): string {
                                     return match ($state) {
-                                        'environment' => __('environment.effective_variables.source.environment'),
-                                        'project' => __('environment.effective_variables.source.project'),
-                                        default => __('environment.effective_variables.source.default'),
+                                        VariableKeySource::Environment->value => __('environment.effective_variables.source.environment'),
+                                        VariableKeySource::Project->value => __('environment.effective_variables.source.project'),
+                                        VariableKeySource::VariableKey->value => __('environment.effective_variables.source.default'),
                                     };
                                 })
                                 ->badge()
@@ -209,9 +144,7 @@ class EnvironmentResource extends Resource
                                     default => 'gray',
                                 }),
                             Infolists\Components\TextEntry::make('actions')
-                                ->state('⋯')
-                                ->label('')
-                                ->alignment(Alignment::End)
+                                ->label('Aktionen')
                                 ->suffixActions([
                                     EditAtSourceAction::make(),
                                     AdoptAsProjectDefaultAction::make(),

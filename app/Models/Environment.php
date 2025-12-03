@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Laravel\Sanctum\HasApiTokens;
 
-class Environment extends BaseModel
+class Environment extends BaseModel implements Authenticatable
 {
     use HasApiTokens;
+    use \Illuminate\Auth\Authenticatable;
 
     public const TYPES = [
         'production',

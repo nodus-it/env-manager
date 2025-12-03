@@ -15,6 +15,8 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         Sanctum::usePersonalAccessTokenModel(PersonalAccessToken::class);
+
+        $this->app->singleton('environment.service', \App\Services\EnvironmentService::class);
     }
 
     /**

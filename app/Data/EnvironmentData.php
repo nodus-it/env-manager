@@ -2,8 +2,8 @@
 
 namespace App\Data;
 
+use App\Facades\EnvironmentService as EnvironmentServiceFacade;
 use App\Models\Environment;
-use App\Services\EnvironmentService;
 use Illuminate\Support\Collection;
 use Spatie\LaravelData\Data;
 
@@ -22,7 +22,7 @@ class EnvironmentData extends Data
     /** @var Collection<int, EnvironmentKeyData> */
     public Collection $keys;
 
-    public static function fromEnvironment(Environment $environment): self
+    public static function fromEnvironment(Environment $environment, bool $showSecrets = false): self
     {
         return self::from([
             'name' => $environment->name,
@@ -30,7 +30,7 @@ class EnvironmentData extends Data
             'type' => $environment->type,
             'projectName' => $environment->project->name,
             'projectSlug' => $environment->project->slug,
-            'keys' => new EnvironmentService()->getKeys($environment),
+            'keys' => EnvironmentServiceFacade::getKeys($environment, $showSecrets),
         ]);
     }
 }
