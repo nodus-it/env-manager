@@ -26,21 +26,6 @@ class EnvironmentResource extends BaseResource
 
     protected static string|\UnitEnum|null $navigationGroup = null;
 
-    public static function getNavigationGroup(): ?string
-    {
-        return __('models.navigation.organisation');
-    }
-
-    public static function getModelLabel(): string
-    {
-        return __('models.environment.label');
-    }
-
-    public static function getPluralModelLabel(): string
-    {
-        return __('models.environment.plural');
-    }
-
     public static function form(Schema $schema): Schema
     {
         return $schema->schema([
@@ -98,8 +83,8 @@ class EnvironmentResource extends BaseResource
             Infolists\Components\TextEntry::make('type')->label(__('fields.type')),
             Infolists\Components\IconEntry::make('is_default')->label(__('fields.is_default'))->boolean(),
             Infolists\Components\TextEntry::make('order')->label(__('fields.order')),
-            Infolists\Components\TextEntry::make('created_at')->label(__('timestamps.created_at'))->dateTime(self::dateTimeFormat()),
-            Infolists\Components\TextEntry::make('updated_at')->label(__('timestamps.updated_at'))->dateTime(self::dateTimeFormat()),
+            Infolists\Components\TextEntry::make('created_at')->label(__('timestamps.created_at'))->dateTime(),
+            Infolists\Components\TextEntry::make('updated_at')->label(__('timestamps.updated_at'))->dateTime(),
 
             \Filament\Schemas\Components\Section::make(__('environment.effective_variables.title'))
                 ->maxWidth(Width::Full)
@@ -185,7 +170,7 @@ class EnvironmentResource extends BaseResource
                 Tables\Columns\TextColumn::make('order')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime(self::dateTimeFormat())
+                    ->dateTime()
                     ->sortable(),
             ])
             ->filters([

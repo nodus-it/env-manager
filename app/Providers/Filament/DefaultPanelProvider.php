@@ -7,11 +7,12 @@ use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
-use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
+use Filament\Schemas\Schema;
 use Filament\Support\Colors\Color;
 use Filament\Support\Enums\Width;
+use Filament\Tables\Table;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
@@ -22,6 +23,17 @@ use Jeffgreco13\FilamentBreezy\BreezyCore;
 
 class DefaultPanelProvider extends PanelProvider
 {
+    public function boot(): void
+    {
+        Schema::configureUsing(function (Schema $schema): void {
+            $schema->defaultDateTimeDisplayFormat('d.m.Y H:i');
+        });
+
+        Table::configureUsing(function (Table $table): void {
+            $table->defaultDateTimeDisplayFormat('d.m.Y H:i');
+        });
+    }
+
     public function panel(Panel $panel): Panel
     {
         return $panel
@@ -36,9 +48,6 @@ class DefaultPanelProvider extends PanelProvider
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
-            ->pages([
-                Dashboard::class,
-            ])
             ->readOnlyRelationManagersOnResourceViewPagesByDefault(false)
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
             ->widgets([

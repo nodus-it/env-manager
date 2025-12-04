@@ -2,52 +2,39 @@
 
 namespace App\Filament\Resources;
 
+use App\Enums\NavigationGroup;
 use App\Filament\Resources\TeamResource\Pages;
 use App\Filament\Resources\TeamResource\RelationManagers\ProjectsRelationManager;
 use App\Filament\Resources\TeamResource\RelationManagers\UsersRelationManager;
 use App\Models\Team;
-use Filament\Forms;
-use Filament\Infolists;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
+use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Schema;
-use Filament\Tables;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
 class TeamResource extends BaseResource
 {
     protected static ?string $model = Team::class;
 
+    protected static string|null|\UnitEnum $navigationGroup = NavigationGroup::SETTINGS;
+
     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-user-group';
-
-    protected static string|\UnitEnum|null $navigationGroup = null;
-
-    public static function getNavigationGroup(): ?string
-    {
-        return __('models.navigation.settings');
-    }
-
-    public static function getModelLabel(): string
-    {
-        return __('models.team.label');
-    }
-
-    public static function getPluralModelLabel(): string
-    {
-        return __('models.team.plural');
-    }
 
     public static function form(Schema $schema): Schema
     {
         return $schema->schema([
-            Forms\Components\TextInput::make('name')
+            TextInput::make('name')
                 ->label(__('fields.name'))
                 ->required()
                 ->maxLength(255),
-            Forms\Components\TextInput::make('slug')
+            TextInput::make('slug')
                 ->label(__('fields.slug'))
                 ->required()
                 ->maxLength(255)
                 ->unique(ignoreRecord: true),
-            Forms\Components\Select::make('owner_id')
+            Select::make('owner_id')
                 ->label(__('fields.owner'))
                 ->relationship('owner', 'name')
                 ->searchable()
@@ -59,47 +46,42 @@ class TeamResource extends BaseResource
     public static function infolist(Schema $schema): Schema
     {
         return $schema->schema([
-            Infolists\Components\TextEntry::make('name')->label(__('fields.name')),
-            Infolists\Components\TextEntry::make('slug')->label(__('fields.slug')),
-            Infolists\Components\TextEntry::make('owner.name')->label(__('fields.owner')),
-            Infolists\Components\TextEntry::make('created_at')->label(__('timestamps.created_at'))->dateTime(self::dateTimeFormat()),
-            Infolists\Components\TextEntry::make('updated_at')->label(__('timestamps.updated_at'))->dateTime(self::dateTimeFormat()),
+            TextEntry::make('name')->label(__('fields.name')),
+            TextEntry::make('slug')->label(__('fields.slug')),
+            TextEntry::make('owner.name')->label(__('fields.owner')),
+            TextEntry::make('created_at')->label(__('timestamps.created_at'))->dateTime(),
+            TextEntry::make('updated_at')->label(__('timestamps.updated_at'))->dateTime(),
         ]);
     }
 
     public static function table(Table $table): Table
     {
-        return $table
+        return parent::table($table)
             ->columns([
-                Tables\Columns\TextColumn::make('name')
+                TextColumn::make('name')
                     ->sortable()
                     ->searchable(),
-                Tables\Columns\TextColumn::make('slug')
+                TextColumn::make('slug')
                     ->sortable()
                     ->searchable(),
-                Tables\Columns\TextColumn::make('owner.name')
+                TextColumn::make('owner.name')
                     ->label(__('fields.owner'))
                     ->sortable()
                     ->searchable(),
-                Tables\Columns\TextColumn::make('users_count')
+                TextColumn::make('users_count')
                     ->counts('users')
                     ->label(__('fields.members')),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime(self::dateTimeFormat())
+                TextColumn::make('created_at')
+                    ->dateTime()
                     ->sortable(),
-            ])
-            ->filters([
-                //
-            ])
-            ->recordActions(self::defaultRecordActions())
-            ->toolbarActions(self::defaultToolbarActions());
+            ]);
     }
 
     public static function getRelations(): array
     {
         return [
-            UsersRelationManager::class,
             ProjectsRelationManager::class,
+            UsersRelationManager::class,
         ];
     }
 

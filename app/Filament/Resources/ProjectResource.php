@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources;
 
+use App\Enums\NavigationGroup;
+
 use App\Filament\Resources\ProjectResource\Pages;
 use App\Filament\Resources\ProjectResource\RelationManagers\EnvironmentsRelationManager;
 use App\Filament\Resources\ProjectResource\RelationManagers\ProjectVariableValuesRelationManager;
@@ -19,22 +21,7 @@ class ProjectResource extends BaseResource
 
     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    protected static string|\UnitEnum|null $navigationGroup = null;
-
-    public static function getNavigationGroup(): ?string
-    {
-        return __('models.navigation.settings');
-    }
-
-    public static function getModelLabel(): string
-    {
-        return __('models.project.label');
-    }
-
-    public static function getPluralModelLabel(): string
-    {
-        return __('models.project.plural');
-    }
+    protected static string|\UnitEnum|null $navigationGroup = NavigationGroup::MAIN;
 
     public static function form(Schema $schema): Schema
     {
@@ -66,8 +53,8 @@ class ProjectResource extends BaseResource
             Infolists\Components\TextEntry::make('name')->label(__('fields.name')),
             Infolists\Components\TextEntry::make('slug')->label(__('fields.slug')),
             Infolists\Components\TextEntry::make('repo_url')->label(__('fields.repo_url'))->url(fn ($record) => $record->repo_url, true),
-            Infolists\Components\TextEntry::make('created_at')->label(__('timestamps.created_at'))->dateTime(self::dateTimeFormat()),
-            Infolists\Components\TextEntry::make('updated_at')->label(__('timestamps.updated_at'))->dateTime(self::dateTimeFormat()),
+            Infolists\Components\TextEntry::make('created_at')->label(__('timestamps.created_at'))->dateTime(),
+            Infolists\Components\TextEntry::make('updated_at')->label(__('timestamps.updated_at'))->dateTime(),
         ]);
     }
 
@@ -89,11 +76,8 @@ class ProjectResource extends BaseResource
                     ->counts('teams')
                     ->label(__('models.team.plural')),
                 Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime(self::dateTimeFormat())
+                    ->dateTime()
                     ->sortable(),
-            ])
-            ->filters([
-                //
             ])
             ->recordActions(self::defaultRecordActions())
             ->toolbarActions(self::defaultToolbarActions());

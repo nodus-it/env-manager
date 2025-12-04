@@ -17,21 +17,6 @@ class EnvironmentVariableValueResource extends BaseResource
 
     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-cog-6-tooth';
 
-    public static function getNavigationGroup(): ?string
-    {
-        return __('models.navigation.organisation');
-    }
-
-    public static function getModelLabel(): string
-    {
-        return __('models.environment_variable_value.label');
-    }
-
-    public static function getPluralModelLabel(): string
-    {
-        return __('models.environment_variable_value.plural');
-    }
-
     public static function shouldRegisterNavigation(): bool
     {
         return false;
@@ -90,8 +75,8 @@ class EnvironmentVariableValueResource extends BaseResource
         return $schema->schema([
             Infolists\Components\TextEntry::make('environment.name')->label(__('models.environment.label')),
             Infolists\Components\TextEntry::make('variableKey.key')->label(__('fields.variable_key')),
-            Infolists\Components\TextEntry::make('created_at')->label(__('timestamps.created_at'))->dateTime(self::dateTimeFormat()),
-            Infolists\Components\TextEntry::make('updated_at')->label(__('timestamps.updated_at'))->dateTime(self::dateTimeFormat()),
+            Infolists\Components\TextEntry::make('created_at')->label(__('timestamps.created_at'))->dateTime(),
+            Infolists\Components\TextEntry::make('updated_at')->label(__('timestamps.updated_at'))->dateTime(),
         ]);
     }
 
@@ -113,11 +98,8 @@ class EnvironmentVariableValueResource extends BaseResource
                         return $record->variableKey?->is_secret ? '••••' : $record->value;
                     }),
                 Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime(self::dateTimeFormat())
+                    ->dateTime()
                     ->sortable(),
-            ])
-            ->filters([
-                //
             ])
             ->recordActions(self::defaultRecordActions())
             ->toolbarActions(self::defaultToolbarActions());
