@@ -2,15 +2,19 @@
 
 namespace App\Models;
 
+use App\Observers\BlameableObserver;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
+#[ObservedBy([BlameableObserver::class])]
 class Team extends BaseModel
 {
     protected $fillable = [
         'name',
         'slug',
         'owner_id',
+        'created_by',
+        'updated_by',
     ];
 
     public function owner(): BelongsTo

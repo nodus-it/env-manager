@@ -32,14 +32,4 @@ class EnvironmentVariableValue extends BaseModel
     {
         return $this->belongsTo(VariableKey::class);
     }
-
-    public function createdBy(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'created_by');
-    }
-
-    public function updatedBy(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'updated_by');
-    }
 }

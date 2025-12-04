@@ -156,9 +156,9 @@ class TestSeeder extends Seeder
     {
         // Define exactly three in a deterministic order
         $definitions = [
-            ['name' => 'Production', 'slug' => 'prod', 'type' => 'production', 'order' => 0, 'is_default' => true],
-            ['name' => 'Staging', 'slug' => 'staging', 'type' => 'staging', 'order' => 10, 'is_default' => false],
-            ['name' => 'Testing', 'slug' => 'testing', 'type' => 'testing', 'order' => 20, 'is_default' => false],
+            ['name' => 'Production', 'slug' => 'prod', 'type' => 'production', 'is_default' => true],
+            ['name' => 'Staging', 'slug' => 'staging', 'type' => 'staging', 'is_default' => false],
+            ['name' => 'Testing', 'slug' => 'testing', 'type' => 'testing', 'is_default' => false],
         ];
 
         foreach ($definitions as $def) {
@@ -169,7 +169,6 @@ class TestSeeder extends Seeder
                 ],
                 [
                     'name' => $def['name'],
-                    'order' => $def['order'],
                     'type' => $def['type'],
                     'is_default' => $def['is_default'],
                 ]

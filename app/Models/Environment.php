@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use App\Observers\BlameableObserver;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Laravel\Sanctum\HasApiTokens;
 
+#[ObservedBy([BlameableObserver::class])]
 class Environment extends BaseModel implements Authenticatable
 {
     use HasApiTokens;
@@ -23,9 +26,10 @@ class Environment extends BaseModel implements Authenticatable
         'project_id',
         'name',
         'slug',
-        'order',
         'type',
         'is_default',
+        'created_by',
+        'updated_by',
     ];
 
     protected function casts(): array
@@ -39,5 +43,10 @@ class Environment extends BaseModel implements Authenticatable
     public function project(): BelongsTo
     {
         return $this->belongsTo(Project::class);
+    }
+
+    public function variables(): HasMany
+    {
+        return $this->hasMany(EnvironmentVariableValue::class);
     }
 }

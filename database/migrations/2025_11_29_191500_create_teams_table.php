@@ -9,12 +9,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('teams', function (Blueprint $table) {
-            $table->id();
+            $table->defaults();
             $table->string('name');
             $table->string('slug')->unique();
             $table->foreignId('owner_id')->constrained('users')->cascadeOnDelete();
-            $table->timestamps();
-            $table->softDeletes();
 
             $table->index('owner_id');
         });

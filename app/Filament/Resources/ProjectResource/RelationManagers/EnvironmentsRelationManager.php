@@ -33,12 +33,6 @@ class EnvironmentsRelationManager extends RelationManager
                             ->ignore($record?->getKey());
                     },
                 ]),
-            Forms\Components\TextInput::make('order')
-                ->label(__('fields.order'))
-                ->numeric()
-                ->default(0)
-                ->minValue(0)
-                ->required(),
             Forms\Components\Select::make('type')
                 ->label(__('fields.type'))
                 ->options(function (): array {

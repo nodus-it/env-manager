@@ -9,14 +9,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('project_variable_values', function (Blueprint $table): void {
-            $table->id();
+            $table->defaults();
             $table->foreignId('project_id')->constrained('projects')->cascadeOnDelete();
             $table->foreignId('variable_key_id')->constrained('variable_keys')->cascadeOnDelete();
             $table->text('value');
-            $table->foreignId('created_by')->constrained('users');
-            $table->foreignId('updated_by')->constrained('users');
-            $table->timestamps();
-            $table->softDeletes();
 
             $table->unique(['project_id', 'variable_key_id'], 'proj_var_values_proj_key_uq');
         });

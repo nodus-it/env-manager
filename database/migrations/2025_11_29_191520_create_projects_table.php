@@ -9,13 +9,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('projects', function (Blueprint $table) {
-            $table->id();
+            $table->defaults();
             $table->string('name');
             $table->string('slug')->unique();
             $table->string('repo_url')->nullable();
             $table->text('description')->nullable();
-            $table->timestamps();
-            $table->softDeletes();
 
             $table->index('name');
         });

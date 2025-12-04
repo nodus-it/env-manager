@@ -26,7 +26,6 @@ class EnvironmentFactory extends Factory
             'project_id' => Project::factory(),
             'name' => $name,
             'slug' => $slugBase.'-'.Str::random(5),
-            'order' => fake()->numberBetween(0, 50),
             'type' => fake()->randomElement(Environment::TYPES),
             'is_default' => false,
         ];

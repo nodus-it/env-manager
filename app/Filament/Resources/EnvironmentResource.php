@@ -50,12 +50,6 @@ class EnvironmentResource extends BaseResource
                             ->ignore($record?->getKey());
                     },
                 ]),
-            Forms\Components\TextInput::make('order')
-                ->label(__('fields.order'))
-                ->numeric()
-                ->default(0)
-                ->minValue(0)
-                ->required(),
             Forms\Components\Select::make('type')
                 ->label(__('fields.type'))
                 ->options(function (): array {
@@ -82,7 +76,6 @@ class EnvironmentResource extends BaseResource
             Infolists\Components\TextEntry::make('slug')->label(__('fields.slug')),
             Infolists\Components\TextEntry::make('type')->label(__('fields.type')),
             Infolists\Components\IconEntry::make('is_default')->label(__('fields.is_default'))->boolean(),
-            Infolists\Components\TextEntry::make('order')->label(__('fields.order')),
             Infolists\Components\TextEntry::make('created_at')->label(__('timestamps.created_at'))->dateTime(),
             Infolists\Components\TextEntry::make('updated_at')->label(__('timestamps.updated_at'))->dateTime(),
 
@@ -167,8 +160,6 @@ class EnvironmentResource extends BaseResource
                 Tables\Columns\IconColumn::make('is_default')
                     ->label(__('fields.is_default'))
                     ->boolean(),
-                Tables\Columns\TextColumn::make('order')
-                    ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable(),

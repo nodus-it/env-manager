@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
+use App\Observers\BlameableObserver;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+#[ObservedBy([BlameableObserver::class])]
 class Project extends BaseModel
 {
     protected $fillable = [
@@ -12,6 +14,8 @@ class Project extends BaseModel
         'slug',
         'repo_url',
         'description',
+        'created_by',
+        'updated_by',
     ];
 
     public function teams(): BelongsToMany
