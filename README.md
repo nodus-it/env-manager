@@ -22,8 +22,7 @@ Environment Manager is a Laravel application focused on clarity and maintainabil
 
 #### All in one
 `
-TODO
-docker run --name=<name> -p <port>:80 nodus-env-manager:latest
+docker run --name=<name> -p <port>:80 nodusit/laravel-env-manager:nginx-latest
 `
 
 #### Compose
