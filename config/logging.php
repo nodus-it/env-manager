@@ -1,8 +1,6 @@
 <?php
 
-use Monolog\Handler\NullHandler;
 use Monolog\Handler\StreamHandler;
-use Monolog\Handler\SyslogUdpHandler;
 use Monolog\Processor\PsrLogMessageProcessor;
 
 return [
@@ -14,7 +12,7 @@ return [
     'channels' => [
         'stack' => [
             'driver' => 'stack',
-            'channels' => ['daily','stderr'],
+            'channels' => ['daily', 'stderr'],
             'ignore_exceptions' => false,
         ],
         'daily' => [
