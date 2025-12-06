@@ -1,59 +1,88 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Environment Manager
+
+A compact Laravel 12 + Filament 4 application for managing and inspecting environment configuration. It ships with sensible defaults and a developer-friendly setup.
 
 <p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+  <a href="https://img.shields.io/badge/PHP-8.4-777BB3?logo=php"> <img alt="PHP" src="https://img.shields.io/badge/PHP-8.4-777BB3?logo=php"> </a>
+  <a href="https://img.shields.io/badge/Laravel-12-FF2D20?logo=laravel"> <img alt="Laravel" src="https://img.shields.io/badge/Laravel-12-FF2D20?logo=laravel"> </a>
+  <a href="https://img.shields.io/badge/Filament-4-2B2E3A"> <img alt="Filament" src="https://img.shields.io/badge/Filament-4-2B2E3A"> </a>
+  <a href="https://img.shields.io/badge/Tests-Pest%204-6C5CE7"> <img alt="Pest" src="https://img.shields.io/badge/Tests-Pest%204-6C5CE7"> </a>
+  <a href="https://img.shields.io/badge/License-MIT-green"> <img alt="License" src="https://img.shields.io/badge/License-MIT-green"> </a>
 </p>
 
-## About Laravel
+## Introduction
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+**--> This project is currently work in progress <--**
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Environment Manager is a Laravel application focused on clarity and maintainability of environment-based configuration. It provides a clean baseline for local development and production-ready defaults.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Installation
 
-## Learning Laravel
+### Run by docker
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+#### All in one
+`
+TODO
+docker run --name=<name> -p <port>:80 nodus-env-manager:latest
+`
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+#### Compose
 
-## Laravel Sponsors
+´
+TODO
+´
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### Run manually
+- Clone the repository
+- Run `composer setup`
+- Run `php artisan serve` or connect with your favourite webserver
 
-### Premium Partners
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+## Configuration
 
-## Contributing
+All configuration lives in the `config/` directory and is driven by environment variables. Below is an English summary of the ENV variables effectively used by this project’s config files and their defaults.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### Environment variables overview
 
-## Code of Conduct
+| Variable | Description | Default |
+|---|---|---|
+| APP_NAME | Application name; also used for the session cookie name | Environment-Manager |
+| APP_ENV | Application environment | production |
+| APP_DEBUG | Debug mode | false |
+| APP_URL | Base application URL | http://localhost:80 |
+| APP_TIMEZONE | Default timezone | Europe/Berlin |
+| APP_LOCALE | Default locale | de |
+| APP_FALLBACK_LOCALE | Fallback locale | en |
+| APP_KEY | Encryption key | — (none) |
+| APP_PREVIOUS_KEYS | Comma-separated list of previous app keys | '' (empty) |
+| LOG_LEVEL | Log level for `daily` and `stderr` channels | debug |
+| DB_CONNECTION | Default database connection | sqlite |
+| DB_URL | DSN/URL for database connection | — (none) |
+| DB_DATABASE | Database name/path | sqlite: storage/database.sqlite; otherwise: laravel |
+| DB_FOREIGN_KEYS | SQLite: enforce foreign keys | true |
+| DB_HOST | DB host (MySQL/MariaDB/PostgreSQL) | 127.0.0.1 |
+| DB_PORT | DB port (MySQL/MariaDB) | 3306 |
+| DB_PORT | DB port (PostgreSQL) | 5432 |
+| DB_USERNAME | DB username | root |
+| DB_PASSWORD | DB password | '' (empty) |
+| DB_SOCKET | Unix socket (MySQL/MariaDB) | '' (empty) |
+| DB_CHARSET | Charset (MySQL/MariaDB/PostgreSQL) | utf8mb4 (PostgreSQL: utf8) |
+| DB_COLLATION | Collation (MySQL/MariaDB) | utf8mb4_unicode_ci |
+| MYSQL_ATTR_SSL_CA | Path to SSL CA (MySQL/MariaDB) | — (none) |
+| MAIL_SCHEME | Mail scheme (e.g., tls) | — (none) |
+| MAIL_URL | SMTP URL | — (none) |
+| MAIL_HOST | SMTP host | 127.0.0.1 |
+| MAIL_PORT | SMTP port | 2525 |
+| MAIL_USERNAME | SMTP username | — (none) |
+| MAIL_PASSWORD | SMTP password | — (none) |
+| MAIL_EHLO_DOMAIN | EHLO/HELO domain | Host derived from APP_URL if not set |
+| MAIL_FROM_ADDRESS | Global sender address | hello@example.com |
+| MAIL_FROM_NAME | Global sender name | Example |
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Notes:
+- Some defaults depend on the selected driver (e.g., `DB_DATABASE`). Values above reflect what’s defined in `config/`.
+- Derived defaults (e.g., `MAIL_EHLO_DOMAIN`) will be computed from the current app configuration if not set.
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+This project is open-sourced software licensed under the MIT license.
