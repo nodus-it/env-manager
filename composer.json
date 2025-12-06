@@ -79,11 +79,13 @@
             "@pest"
         ],
         "setup": [
-            "composer install",
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\"",
             "@php artisan key:generate",
             "@php artisan migrate:fresh --force",
-            "@php artisan filament:user --name=Test --email=test@nodus-it.de --password=12345678",
+            "@php artisan filament:user --name=Test --email=admin@admin --password=admin"
+        ],
+        "setup:test": [
+            "@setup",
             "@php artisan db:seed TestSeeder"
         ],
         "post-autoload-dump": [

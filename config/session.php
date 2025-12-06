@@ -13,5 +13,5 @@ return [
     'path' => '/',
     'http_only' => true,
     'same_site' => 'lax',
-    'partitioned' => 'false',
+    'partitioned' => false,
 ];
